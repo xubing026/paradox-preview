@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="你不知道自己，一直重复同一个错">
+<meta property="og:description" content="PARADOX · 把你的交割单一页页读完之后，告诉你一直在重复的那个动作。">
+<meta name="description" content="PARADOX · 把你的交割单一页页读完之后，告诉你一直在重复的那个动作。">
+<meta name="theme-color" content="#05080C">
+<title>PARADOX · 你不知道自己</title>
+<style>
+:root{
+  --bg:#05080C;--bg-1:#080C12;--bg-2:#0D131C;--bg-3:#131B26;
+  --line:rgba(255,255,255,.08);--line-3:rgba(255,255,255,.14);
+  --txt:#E8EDF4;--txt-2:#AEB9C7;--txt-3:#8A97A8;--txt-4:#5A6779;--txt-5:#3E4A5A;
+  --gold:#E8C36A;--gold-2:#F0A94A;--gold-on:#1A1206;
+  --up:#F04848;--down:#26A69A;--warn:#F0A94A;--info:#6EA8FE;
+  --fs-hero:28px;--fs-h1:25px;--fs-h2:20px;--fs-h3:15.5px;
+  --r-xl:15px;--r-lg:11px;--r-md:9px;--r-pill:999px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* ============ 背景三层（复用首页工艺） ============ */
+.bgflow,.bgcone,.bgyig{position:fixed;pointer-events:none;z-index:0}
+.bgflow{inset:-40%;background:
+  radial-gradient(46% 34% at 30% 26%,rgba(232,195,106,.085),transparent 62%),
+  radial-gradient(38% 30% at 72% 68%,rgba(110,168,254,.045),transparent 62%);
+  animation:drift 26s ease-in-out infinite alternate}
+@keyframes drift{0%{transform:translate3d(-2%,-1%,0) scale(1)}100%{transform:translate3d(2%,2%,0) scale(1.08)}}
+.bgcone{inset:-30%;background:conic-gradient(from 0deg at 50% 50%,
+  transparent 0deg,rgba(232,195,106,.045) 42deg,transparent 92deg,
+  transparent 180deg,rgba(240,169,74,.03) 226deg,transparent 290deg);
+  animation:spin 52s linear infinite;opacity:.9}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bgyig{inset:0;background:radial-gradient(120% 76% at 50% 42%,transparent 34%,rgba(3,5,10,.85) 100%)}
+
+.wrap{position:relative;z-index:2}
+
+/* ============ 通用 ============ */
+section{padding:96px 24px;max-width:900px;margin:0 auto;position:relative}
+.rv{opacity:0;transform:translateY(26px);transition:opacity 1s cubic-bezier(.22,.7,.3,1),transform 1s cubic-bezier(.22,.7,.3,1)}
+.rv.in{opacity:1;transform:none}
+.eyebrow{font-size:10.5px;letter-spacing:5px;color:var(--gold);opacity:.8;margin-bottom:22px}
+h2{font-size:25px;font-weight:300;letter-spacing:5px;line-height:1.62}
+h2 b{font-weight:400;color:var(--gold)}
+.lead{margin-top:20px;font-size:14.5px;font-weight:300;line-height:2.15;color:var(--txt-2);letter-spacing:.4px;max-width:620px}
+.lead .dim{color:var(--txt-4)}
+.lead b{color:var(--txt);font-weight:400}
+
+/* ============ ① 首屏：大字血洗 ============ */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:80px 24px;max-width:1020px;margin:0 auto;position:relative}
+.hero .kick{font-size:10.5px;letter-spacing:6px;color:var(--txt-4);opacity:0;animation:rise 1s .2s forwards}
+.hero h1{margin-top:34px;font-size:clamp(38px,8.4vw,84px);font-weight:200;line-height:1.24;
+  letter-spacing:clamp(2px,.9vw,6px);position:relative}
+.hero h1 .l{display:block;opacity:0;transform:translateY(30px)}
+.hero h1 .l1{animation:rise 1.1s .5s cubic-bezier(.22,.7,.3,1) forwards}
+.hero h1 .l2{animation:rise 1.1s .82s cubic-bezier(.22,.7,.3,1) forwards}
+.hero h1 .l3{animation:rise 1.1s 1.14s cubic-bezier(.22,.7,.3,1) forwards;color:var(--gold)}
+.hero h1 .strike{position:relative;display:inline-block}
+.hero h1 .strike::after{content:'';position:absolute;left:0;right:0;top:52%;height:2px;background:var(--gold);
+  transform-origin:left;transform:scaleX(0);animation:strike 1s 1.9s cubic-bezier(.6,.05,.2,1) forwards;
+  box-shadow:0 0 14px rgba(232,195,106,.6)}
+@keyframes strike{to{transform:scaleX(1)}}
+@keyframes rise{to{opacity:1;transform:none}}
+.hero .sub{margin-top:40px;font-size:15px;font-weight:300;line-height:2.1;color:var(--txt-2);letter-spacing:.5px;
+  max-width:560px;opacity:0;animation:rise 1.2s 2.3s forwards}
+.hero .sub b{color:var(--txt);font-weight:400}
+.hero .cta{margin-top:52px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;opacity:0;animation:rise 1.2s 2.8s forwards}
+.btn{padding:15px 40px;border-radius:11px;font-size:14px;letter-spacing:3px;text-indent:3px;
+  text-decoration:none;font-weight:500;transition:.26s;display:inline-block;white-space:nowrap}
+.btn.pri{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:var(--gold-on);
+  box-shadow:0 10px 36px rgba(232,195,106,.24)}
+.btn.pri:hover{transform:translateY(-2px);box-shadow:0 15px 46px rgba(232,195,106,.36)}
+.btn.gho{color:var(--txt-3);border:1px solid var(--line-3);letter-spacing:2px;font-weight:400;font-size:13px;padding:14px 30px}
+.btn.gho:hover{color:var(--gold);border-color:rgba(232,195,106,.5)}
+.hero .foot{margin-top:44px;font-size:11.5px;color:var(--txt-5);letter-spacing:1.6px;opacity:0;animation:rise 1s 3.2s forwards}
+.hero .scroll{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);font-size:10px;
+  letter-spacing:3.5px;color:var(--txt-5);display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;animation:rise 1s 3.6s forwards}
+.hero .scroll s{display:block;width:1px;height:38px;background:linear-gradient(180deg,var(--line-3),transparent)}
+
+/* ============ ② 三问 ============ */
+.qs{display:flex;flex-direction:column;gap:0;margin-top:52px;border-top:1px solid var(--line)}
+.q{display:flex;gap:22px;align-items:flex-start;padding:28px 4px;border-bottom:1px solid var(--line);
+  transition:.3s}
+.q:hover{background:rgba(232,195,106,.03);padding-left:14px}
+.q .n{flex:none;font-size:11px;color:var(--gold);letter-spacing:2px;opacity:.65;padding-top:6px;width:30px}
+.q .t{font-size:17.5px;font-weight:300;letter-spacing:1.6px;line-height:1.75;color:var(--txt)}
+.q .t em{font-style:normal;color:var(--gold);border-bottom:1px solid rgba(232,195,106,.35);padding-bottom:1px}
+.q .d{margin-top:9px;font-size:13px;color:var(--txt-4);line-height:1.9;letter-spacing:.3px}
+
+/* ============ ③ 反派 ============ */
+.villain{margin-top:50px;border:1px solid var(--line);border-radius:var(--r-xl);padding:34px 32px;
+  background:linear-gradient(160deg,rgba(255,255,255,.028),rgba(255,255,255,.008));
+  display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+.villain .ic{flex:none;width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle,rgba(232,195,106,.1),transparent 70%);border:1px solid rgba(232,195,106,.18)}
+.villain .ic svg{width:28px;height:28px;color:var(--gold)}
+.villain .tx{flex:1;min-width:250px}
+.villain .tx .hi{font-size:18px;font-weight:300;letter-spacing:1.8px;line-height:1.7}
+.villain .tx .hi b{color:var(--gold);font-weight:400}
+.villain .tx .lo{margin-top:11px;font-size:13px;color:var(--txt-3);line-height:2;letter-spacing:.3px}
+
+/* ============ ④ 给糖 ============ */
+.sugar{margin-top:52px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{border:1px solid var(--line);border-radius:var(--r-lg);padding:26px 24px;
+  background:linear-gradient(165deg,rgba(255,255,255,.03),rgba(255,255,255,.006));transition:.32s}
+.card:hover{border-color:rgba(232,195,106,.3);transform:translateY(-3px)}
+.card .lb{font-size:10.5px;letter-spacing:3.4px;color:var(--txt-4);margin-bottom:16px}
+.card .big{font-size:32px;font-weight:200;letter-spacing:1px;line-height:1.3}
+.card .big.up{color:var(--up)}
+.card .big.dn{color:var(--down)}
+.card .note{margin-top:12px;font-size:12.5px;color:var(--txt-3);line-height:1.9;letter-spacing:.3px}
+.card .note b{color:var(--txt-2);font-weight:400}
+.card.hl{border-color:rgba(232,195,106,.3);background:linear-gradient(165deg,rgba(232,195,106,.07),rgba(255,255,255,.01))}
+
+/* ============ ⑤ 方法 ============ */
+.rules{margin-top:48px;counter-reset:r}
+.rule{display:flex;gap:22px;padding:26px 0;border-bottom:1px dashed rgba(232,195,106,.2)}
+.rule:first-child{border-top:1px dashed rgba(232,195,106,.2)}
+.rule .no{flex:none;font-size:11px;color:var(--gold);letter-spacing:2px;width:34px;padding-top:5px;opacity:.75}
+.rule .bd{flex:1;min-width:0}
+.rule .ht{font-size:16.5px;font-weight:400;letter-spacing:1.2px;line-height:1.7;color:var(--txt)}
+.rule .ds{margin-top:9px;font-size:13px;color:var(--txt-3);line-height:2;letter-spacing:.3px}
+.rule .ds b{color:var(--txt-2);font-weight:400}
+
+/* ============ ⑥ 转化 ============ */
+.final{text-align:center;padding:110px 24px 130px}
+.final .mk{width:56px;height:56px;color:var(--gold);margin-bottom:30px;
+  filter:drop-shadow(0 0 20px rgba(232,195,106,.3))}
+.final h2{font-size:26px;letter-spacing:6px;line-height:1.7}
+.final .lead{margin:22px auto 0;text-align:center}
+.final .cta{margin-top:46px;display:flex;gap:20px;justify-content:center;flex-wrap:wrap}
+.final .safe{margin-top:34px;font-size:11.5px;color:var(--txt-5);letter-spacing:1.4px;line-height:2}
+
+/* 屏间细虚线（承接报告的方案B） */
+.sep{max-width:900px;margin:0 auto;padding:0 24px}
+.sep i{display:block;border-top:1px dashed rgba(232,195,106,.16);position:relative}
+.sep i::after{content:'';position:absolute;left:50%;top:-3px;width:6px;height:6px;border-radius:50%;
+  background:var(--gold);transform:translateX(-50%);opacity:.5;box-shadow:0 0 10px rgba(232,195,106,.5)}
+
+@media(max-width:720px){
+  section{padding:70px 20px}
+  .hero h1{letter-spacing:1.5px}
+  .sugar{grid-template-columns:1fr}
+  .q .t{font-size:15.5px}
+  h2{font-size:21px;letter-spacing:3px}
+  .card .big{font-size:27px}
+  .final{padding:80px 20px 100px}
+  .btn{padding:14px 30px;font-size:13.5px;letter-spacing:2px}
+}
+</style>
+</head>
+<body>
+<div class="bgflow"></div><div class="bgcone"></div><div class="bgyig"></div>
+
+<div class="wrap">
+
+<!-- ══════════ ① 首屏：大字血洗 ══════════ -->
+<div class="hero">
+  <div class="kick">PARADOX · 交易模式发现器</div>
+  <h1>
+    <span class="l l1">你不知道自己，</span>
+    <span class="l l2">一直重复<span class="strike">同一个错。</span></span>
+  </h1>
+  <div class="sub">
+    你不是不会交易。<br>
+    <b>你只是从没见过自己交易时的样子。</b>
+  </div>
+  <div class="cta">
+    <a class="btn pri" href="#act">看看我错在哪</a>
+    <a class="btn gho" href="#how">它是怎么做到的</a>
+  </div>
+  <div class="foot">不预测市场 · 不推荐股票 · 只反推你自己</div>
+  <div class="scroll">往下看<s></s></div>
+</div>
+
+<div class="sep"><i></i></div>
+
+<!-- ══════════ ② 三问：对号入座 ══════════ -->
+<section class="rv">
+  <div class="eyebrow">先别急着往下看</div>
+  <h2>这三句话，<br>你能对上<b>几句</b>？</h2>
+
+  <div class="qs">
+    <div class="q">
+      <div class="n">01</div>
+      <div>
+        <div class="t">亏了钱，<em>却说不出为什么亏</em>。</div>
+        <div class="d">"行情不好"、"运气差"、"再等等就回来了"——除了这些，你还有别的解释吗？</div>
+      </div>
+    </div>
+    <div class="q">
+      <div class="n">02</div>
+      <div>
+        <div class="t">明明是同一套方法，<em>有时赚、有时亏</em>。</div>
+        <div class="d">你以为是方法不稳定。其实是你——有时候照着做，有时候没照着做。</div>
+      </div>
+    </div>
+    <div class="q">
+      <div class="n">03</div>
+      <div>
+        <div class="t">同样的坑，<em>踩过不止一次</em>。</div>
+        <div class="d">追高、补仓、扛着不走。每次都发誓"下次不会了"，下次照旧。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lead" style="margin-top:38px">
+    如果对上了，问题就不在行情，也不在方法——<br>
+    <b>在于你从来没拿到过一份关于自己的证据。</b>
+  </div>
+</section>
+
+<div class="sep"><i></i></div>
+
+<!-- ══════════ ③ 反派：卸下防御 ══════════ -->
+<section class="rv">
+  <div class="eyebrow">所以问题在哪</div>
+  <h2>不是你不会，<br>是<b>没有人给你镜子</b>。</h2>
+
+  <div class="villain">
+    <div class="ic">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="8.6"/><path d="M12 8.4v4.8l3 2"/>
+      </svg>
+    </div>
+    <div class="tx">
+      <div class="hi">券商 App 给你看的是<b>结果</b>：赚了多少、亏了多少。</div>
+      <div class="lo">它不会告诉你"你在 10 点 02 分买的那一笔，跟你 9 点 30 分挂的那一笔，是两种完全不同的动作"。<br>
+      结果人人都看得见，<b style="color:var(--txt-2);font-weight:400">原因没人给你摊开。</b></div>
+    </div>
+  </div>
+
+  <div class="lead" style="margin-top:40px">
+    你把交割单截图给我，我不算你赚了多少——<br>
+    <b>我把你重复在做的事，一条一条挑出来。</b>
+  </div>
+</section>
+
+<div class="sep"><i></i></div>
+
+<!-- ══════════ ④ 给糖：先给信心 ══════════ -->
+<section class="rv">
+  <div class="eyebrow">最重要的一件事</div>
+  <h2>先说个好消息：<br><b>你有一招，真的很行。</b></h2>
+  <div class="lead">
+    越是亏得多的人，越不敢看自己的数据。<br>
+    所以我们先给你看<b>你赚钱的那一面</b>——它是真实存在的，只是你从没数过。
+  </div>
+
+  <div class="sugar">
+    <div class="card hl">
+      <div class="lb">你的得意技（示例）</div>
+      <div class="big up">开盘挂单 × 闪电了结</div>
+      <div class="note">22 次出手，胜率 <b>54%</b>，净赚 <b class="num" style="color:var(--up)">+1,849</b>。<br>其中 21 次，都在开盘前 15 分钟完成。</div>
+    </div>
+    <div class="card">
+      <div class="lb">但它被你自己打断了（示例）</div>
+      <div class="big dn">-10,177</div>
+      <div class="note">5 笔「不是这一招」的操作，全亏。<br><b>不是你不行，是你没用自己最行的那一招。</b></div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"><i></i></div>
+
+<!-- ══════════ ⑤ 方法：给方向 ══════════ -->
+<section class="rv" id="how">
+  <div class="eyebrow">然后是方法</div>
+  <h2>它不会告诉你买什么，<br>只会告诉你<b>你自己该怎么做</b>。</h2>
+  <div class="lead">下面三条，不是我们定的规矩——<b>是从你自己的成交里反推出来的铁律</b>。</div>
+
+  <div class="rules">
+    <div class="rule">
+      <div class="no">一</div>
+      <div class="bd">
+        <div class="ht">条件满足就早挂单，过了时点不追高</div>
+        <div class="ds">数据显示：你 <b>开盘挂单</b> 的表现，明显好过盘中追买。<br>时间不是判据——<b>条件满足就挂，没满足就别追</b>。</div>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="no">二</div>
+      <div class="bd">
+        <div class="ht">第一笔被套，不补仓</div>
+        <div class="ds">数据显示：你的补仓几乎没救回过方向，<b>只是把小亏养成了大亏</b>。</div>
+      </div>
+    </div>
+    <div class="rule">
+      <div class="no">三</div>
+      <div class="bd">
+        <div class="ht">趋势破了就走，别拿"战法"当借口</div>
+        <div class="ds">你最大的漏洞不是买错，是<b>该走的时候没走</b>。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lead" style="margin-top:38px">
+    这三条，你随时能带走。下单前看一眼，就够了。
+  </div>
+</section>
+
+<div class="sep"><i></i></div>
+
+<!-- ══════════ ⑥ 品牌立意 ══════════ -->
+<section class="rv">
+  <div class="eyebrow">为什么叫 PARADOX</div>
+  <h2>凡所有相，皆是虚妄。<br><b>真相都藏在反面。</b></h2>
+  <div class="lead">
+    这个市场真正的敌人只有一个人——<b>就是你自己</b>。<br>
+    也是这个市场唯一的朋友。<br>
+    <span class="dim">PARADOX 是一面镜子，不是一个预言家。</span>
+  </div>
+</section>
+
+<div class="sep"><i></i></div>
+
+<!-- ══════════ ⑦ 转化 ══════════ -->
+<section class="final rv" id="act">
+  <svg class="mk" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+    <path d="M10 8h13c6 0 10 3.6 10 9s-4 9-10 9h-13" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+    <path d="M38 40H25c-6 0-10-3.6-10-9" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" opacity=".42"/>
+  </svg>
+  <h2>想看看自己的那一面吗</h2>
+  <div class="lead">
+    把你的交割单截图给我。<br>三分钟，我给你一份<b>只关于你</b>的报告。
+  </div>
+  <div class="cta">
+    <span class="btn pri" style="cursor:default">内测中 · 想试的话找我 →</span>
+  </div>
+  <div class="safe">
+    内测中 · 你的数据只在你和设备之间流转，不上传服务器<br>
+    <span style="color:var(--txt-5)">不预测市场 · 不推荐股票 · 不构成任何投资建议<br><span style="opacity:.55">（静态展示版 · 完整功能内测中）</span></span>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* 滚动浮现（只做浮现，不做炫技） */
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+},{threshold:.14,rootMargin:'0px 0px -8% 0px'});
+document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
