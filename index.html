@@ -107,6 +107,50 @@ h1 em::after{content:'';position:absolute;left:0;right:0;bottom:1px;height:1.5px
 .foot .k{color:var(--txt-5);flex:none;width:52px}
 .foot .lock{color:var(--gold);opacity:.8}
 
+/* ===== P0 反馈入口（零后端：点标签 → 复制 → 粘回微信） ===== */
+.fb-open{
+  margin:0 0 14px;padding:13px 16px;text-align:center;cursor:pointer;
+  border:1px dashed rgba(232,195,106,.42);border-radius:var(--r-lg);
+  color:var(--gold);font-size:13.5px;letter-spacing:.02em;
+  transition:background .25s,border-color .25s;
+}
+.fb-open:hover{background:rgba(232,195,106,.06);border-color:rgba(232,195,106,.7)}
+.fb-card{
+  margin:0 0 16px;padding:16px 16px 14px;
+  background:rgba(232,195,106,.045);
+  border:1px solid rgba(232,195,106,.26);border-radius:var(--r-lg);
+  animation:rise .45s cubic-bezier(.22,.7,.2,1) both;
+}
+.fb-t{font-size:14px;color:var(--txt);margin-bottom:11px;font-weight:560}
+.fb-t span{font-size:11.5px;color:var(--txt-4);font-weight:400}
+.fb-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:11px}
+.fb-chips .chip{
+  font-size:12px;color:var(--txt-2);padding:6px 11px;border-radius:var(--r-pill);
+  border:1px solid var(--line-3);cursor:pointer;user-select:none;
+  transition:all .2s;background:rgba(255,255,255,.02);
+}
+.fb-chips .chip:hover{border-color:rgba(232,195,106,.55);color:var(--gold)}
+.fb-chips .chip.on{
+  background:rgba(232,195,106,.16);border-color:rgba(232,195,106,.75);
+  color:var(--gold);font-weight:560;
+}
+.fb-ta{
+  width:100%;min-height:76px;resize:vertical;font-family:inherit;
+  background:#0B1119;border:1px solid var(--line-3);border-radius:var(--r-md);
+  padding:11px 13px;color:var(--txt);font-size:13.5px;line-height:1.7;outline:none;
+}
+.fb-ta:focus{border-color:rgba(232,195,106,.5)}
+.fb-ta::placeholder{color:var(--txt-5)}
+.fb-copy{
+  width:100%;margin-top:11px;padding:13px;cursor:pointer;font-family:inherit;
+  background:linear-gradient(180deg,var(--gold),var(--gold-2));
+  color:#1A1206;border:none;border-radius:var(--r-md);
+  font-size:14.5px;font-weight:620;letter-spacing:.01em;
+  transition:filter .2s;
+}
+.fb-copy:hover{filter:brightness(1.07)}
+.fb-done{margin-top:10px;font-size:12.5px;line-height:1.7;color:var(--gold);text-align:center}
+
 @media (max-width:360px){
   .card{padding:28px 18px 20px;border-radius:17px}
   h1{font-size:22px}
@@ -156,6 +200,22 @@ h1 em::after{content:'';position:absolute;left:0;right:0;bottom:1px;height:1.5px
     </a>
   </nav>
 
+  <!-- P0 反馈入口：点开小卡 → 选标签 → 复制 → 粘回微信 -->
+  <div class="fb-open" id="fbOpen" role="button" tabindex="0">看完留一句反馈 · 30 秒 →</div>
+
+  <div class="fb-card" id="fbCard" style="display:none;">
+    <div class="fb-t">哪里戳中了你，哪里没看懂？<span>（可多选，也可只写字）</span></div>
+    <div class="fb-chips" id="fbChips">
+      <span class="chip">说的就是我</span><span class="chip">有点意思</span>
+      <span class="chip">没看懂</span><span class="chip">数字看不懂</span>
+      <span class="chip">太长了</span><span class="chip">想让它读我的单子</span>
+      <span class="chip">手机上看着费劲</span><span class="chip">打不开 / 太慢</span>
+    </div>
+    <textarea class="fb-ta" id="fbTx" placeholder="随便写点什么，好坏都行……"></textarea>
+    <button class="fb-copy" id="fbCopy">复制反馈 → 粘到微信给我</button>
+    <div class="fb-done" id="fbDone" style="display:none;">✓ 已复制。回到微信，长按输入框 → 粘贴 → 发送，就到我这了。</div>
+  </div>
+
   <div class="foot">
     <div class="kv"><span class="k">说明</span><span>这是<b>内测版</b>，只在小圈子里跑，还在改。</span></div>
     <div class="kv"><span class="k">数据</span><span class="lock">你在这里看到的所有数据，都是演示数据，不是任何人的真实账户。</span></div>
@@ -168,9 +228,71 @@ h1 em::after{content:'';position:absolute;left:0;right:0;bottom:1px;height:1.5px
 /* 极简：进来时轻推一下，让首屏动起来（不做视差、不做弹跳） */
 document.addEventListener('DOMContentLoaded', function(){
   var c = document.querySelector('.card');
-  if (!c) return;
-  c.style.animationPlayState = 'running';
+  if (c) c.style.animationPlayState = 'running';
 });
+
+/* ===== P0 反馈入口：零后端，纯本地拼文本 → 剪贴板 → 微信粘贴 ===== */
+(function(){
+  var open = document.getElementById('fbOpen');
+  var card = document.getElementById('fbCard');
+  var chipsBox = document.getElementById('fbChips');
+  var ta = document.getElementById('fbTx');
+  var btn = document.getElementById('fbCopy');
+  var done = document.getElementById('fbDone');
+  if (!open || !card) return;
+
+  var picked = [];
+
+  open.addEventListener('click', function(){
+    var show = card.style.display === 'none';
+    card.style.display = show ? 'block' : 'none';
+    open.textContent = show ? '收起反馈 · 点这里收起' : '看完留一句反馈 · 30 秒 →';
+    if (show) card.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  });
+
+  chipsBox.addEventListener('click', function(e){
+    var chip = e.target.closest('.chip');
+    if (!chip) return;
+    var t = chip.textContent.trim();
+    var i = picked.indexOf(t);
+    if (i >= 0) { picked.splice(i, 1); chip.classList.remove('on'); }
+    else { picked.push(t); chip.classList.add('on'); }
+  });
+
+  function fallbackCopy(text){
+    var t = document.createElement('textarea');
+    t.value = text; t.style.position = 'fixed'; t.style.opacity = '0';
+    document.body.appendChild(t); t.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch(err) { ok = false; }
+    document.body.removeChild(t);
+    return ok;
+  }
+
+  btn.addEventListener('click', function(){
+    var lines = [];
+    if (picked.length) lines.push('【我选的】' + picked.join('、'));
+    var manual = (ta.value || '').trim();
+    if (manual) lines.push(manual);
+    if (!lines.length) {
+      done.style.display = 'block';
+      done.textContent = '选一个标签，或者写一句话，再点复制。';
+      return;
+    }
+    var text = lines.join('\n') + '\n—— PARADOX 内测反馈';
+    var finish = function(ok){
+      done.style.display = 'block';
+      done.textContent = ok
+        ? '✓ 已复制。回到微信，长按输入框 → 粘贴 → 发送，就到我这了。'
+        : '复制没成功。长按下面这段，手动选中复制：\n' + text;
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function(){ finish(true); }, function(){ finish(fallbackCopy(text)); });
+    } else {
+      finish(fallbackCopy(text));
+    }
+  });
+})();
 </script>
 </body>
 </html>
